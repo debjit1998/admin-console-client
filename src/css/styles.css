@@ -1,0 +1,152 @@
+.login {
+  margin-top: 90px;
+  padding: 0 40px 60px;
+}
+
+/*
+.login:hover {
+  transform: scale(1.003);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+}
+*/
+
+.role {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.role:hover {
+  transform: scaleX(1.1);
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+.forgot-password {
+  transition: all 0.3s;
+}
+.forgot-password:hover {
+  transform: scale(1.05);
+}
+
+.alert {
+  transition: all 0.2s;
+  animation: moveIn 0.5s ease-in;
+  border-radius: 10px;
+  backface-visibility: hidden;
+}
+
+.alert:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.list-group-item {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  transition: all 0.3s;
+}
+
+.list-group-item:hover {
+  transform: scaleY(1.1) translateY(2px);
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+.legend {
+  display: inline-block;
+  padding: 10px;
+  margin-right: 40px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  font-weight: bold;
+  border-radius: 4px;
+  transition: all 0.3s;
+  animation: moveIn 0.5s ease-in;
+  backface-visibility: hidden;
+}
+
+@keyframes moveIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.legend:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.legend-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+}
+
+.legend-warning {
+  color: #856404;
+  background-color: #fff3cd;
+}
+
+.legend-success {
+  color: #155724;
+  background-color: #d4edda;
+}
+
+.legend-secondary {
+  color: #383d41;
+  background-color: #e2e3e5;
+}
+
+.col-md-2 {
+  padding-right: 0;
+  padding-left: 0;
+  text-transform: uppercase;
+  overflow: hidden;
+}
+
+@media only screen and (max-width: 768px) {
+  .col-md-2 {
+    margin-top: 50px;
+  }
+  .alert {
+    font-size: 85%;
+  }
+}
+
+@media only screen and (max-width: 490px) {
+  .col-md-2 {
+    margin-top: 50px;
+  }
+  .header {
+    font-size: 80%;
+  }
+
+  .alert {
+    font-size: 65%;
+  }
+
+  .alert span {
+    font-size: 100%;
+    padding-right: 0;
+    margin-right: 0;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .col-md-2 {
+    position: fixed;
+    z-index: 2;
+    width: 16%;
+    margin-top: 50px;
+    height: 100vh;
+    background-image: linear-gradient(to right bottom, #7ed56fd0, #28b485d3);
+  }
+
+  .col-md-10,
+  .page {
+    left: 16.3%;
+  }
+}
