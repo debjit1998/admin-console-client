@@ -122,7 +122,7 @@ function Restaurants({ history }) {
             </>
           )}
 
-          {restaurants.length === 0 ? (
+          {restaurants.length === 0 && !loading ? (
             <h4 className="text-center text-warning">No restaurants found!</h4>
           ) : (
             restaurants.filter(searched(keyword)).map((r) => {

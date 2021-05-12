@@ -525,6 +525,17 @@ function MenuUpdateForm({
               className="mt-2"
             />
           </div>
+          <div className="col-md-6">
+            <label style={{ marginTop: "10px" }}>
+              <b>Festival ID </b> (Select based on the hotel and restaurant){" "}
+            </label>
+            <input
+              type="text"
+              value={values.festival_ids && values.festival_ids[0]}
+              disabled
+              className="form-control mt-2"
+            />
+          </div>
         </div>
 
         <div className="row mt-4">

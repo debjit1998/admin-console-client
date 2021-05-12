@@ -80,6 +80,15 @@ function UserNav() {
         </li>
         <li className="nav-item">
           <Link
+            to="/user/festivebanner"
+            className="list-group-item list-group-item-info list-group-item-action"
+            style={{ color: "black", fontWeight: "bold" }}
+          >
+            Festival Banner
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link
             to="#"
             className="list-group-item list-group-item-info list-group-item-action"
             style={{ color: "black", fontWeight: "bold" }}

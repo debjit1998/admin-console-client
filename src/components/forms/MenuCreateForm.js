@@ -10,6 +10,7 @@ function MenuCreateForm({
   handleSubmit,
   loading,
   handleAllergenChange,
+  banners,
 }) {
   const allergens = [
     "Milk",
@@ -471,7 +472,7 @@ function MenuCreateForm({
         </div>
 
         <div className="row mt-4">
-          <div className="col">
+          <div className="col-md-6">
             <label>
               <b>Description </b> (Press enter to go to next line){" "}
               <h5
@@ -492,6 +493,26 @@ function MenuCreateForm({
               required
               className="mt-2"
             />
+          </div>
+          <div className="col-md-6">
+            <label style={{ marginTop: "10px" }}>
+              <b>Festival ID </b> (Select based on the hotel and restaurant){" "}
+            </label>
+            <select
+              name="festival_ids"
+              className="form-control"
+              onChange={handleChange}
+              required
+            >
+              <option>Please select</option>
+              {banners.map((b, i) => {
+                return (
+                  <option key={i} value={b.festival_id}>
+                    {b.festival_id} ({b.restaurant_name}, {b.hotel_code})
+                  </option>
+                );
+              })}
+            </select>
           </div>
         </div>
 

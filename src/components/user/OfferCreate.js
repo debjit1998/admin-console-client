@@ -405,7 +405,6 @@ function OfferCreate({ history }) {
           </div>
         </div>
       </div>
-      <Prompt when={isDirty} message={"Do you want to discard your changes?"} />
     </>
   );
 }
