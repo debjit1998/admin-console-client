@@ -39,6 +39,28 @@ function UserNav() {
     history.push("/user/offers");
   };
 
+  const handleFestivalBanner = () => {
+    if (user.role !== "admin") {
+      window.alert(
+        "Sorry you have user role and don't have access to this page"
+      );
+      return;
+    }
+
+    history.push("/user/festivebanner");
+  };
+
+  const handleApprovals = () => {
+    if (user.role !== "admin") {
+      window.alert(
+        "Sorry you have user role and don't have access to this page"
+      );
+      return;
+    }
+
+    history.push("/admin/pending-approvals");
+  };
+
   return (
     <nav>
       <ul className="nav flex-column">
@@ -80,9 +102,10 @@ function UserNav() {
         </li>
         <li className="nav-item">
           <Link
-            to="/user/festivebanner"
+            to="#"
             className="list-group-item list-group-item-info list-group-item-action"
             style={{ color: "black", fontWeight: "bold" }}
+            onClick={handleFestivalBanner}
           >
             Festival Banner
           </Link>
@@ -105,6 +128,16 @@ function UserNav() {
             onClick={handleOfferAdd}
           >
             Add Offer
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link
+            to="#"
+            className="list-group-item list-group-item-info list-group-item-action"
+            style={{ color: "black", fontWeight: "bold" }}
+            onClick={handleApprovals}
+          >
+            Pending Approvals
           </Link>
         </li>
         <li className="nav-item">

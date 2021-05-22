@@ -34,10 +34,11 @@ function MenuCreateForm({
       <form onSubmit={handleSubmit}>
         <div className="row">
           <div className="col">
-            <label>
+          <label>
               <b>
                 Title{" "}
-                <h5
+              </b>
+              <h5
                   style={{
                     display: "inline-block",
                     color: "red",
@@ -46,7 +47,7 @@ function MenuCreateForm({
                 >
                   *
                 </h5>
-              </b>
+              (E.G: <b>B</b>utter <b>C</b>hicken)
             </label>
             <input
               type="text"

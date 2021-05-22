@@ -68,3 +68,12 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+{restaurants: [{},{}], menu_items:[], festive_menu:[], offers:[]}
+api/getApprovals
+api/setApproval
+{container:"", id:"" }
+restaurant: hotel_code, name, id
+menu_item: title, item_ref_id, hotel_code, restaurant_name, id
+offer: promotion_name, promotion_code, id
+festive_menu: festival_name, restaurant_name, id, hotel_code

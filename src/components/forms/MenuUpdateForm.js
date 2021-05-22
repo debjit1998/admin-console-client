@@ -37,7 +37,8 @@ function MenuUpdateForm({
             <label>
               <b>
                 Title{" "}
-                <h5
+              </b>
+              <h5
                   style={{
                     display: "inline-block",
                     color: "red",
@@ -46,7 +47,7 @@ function MenuUpdateForm({
                 >
                   *
                 </h5>
-              </b>
+              (E.G: <b>B</b>utter <b>C</b>hicken)
             </label>
             <input
               type="text"

@@ -23,7 +23,8 @@ import OfferCreate from "./user/OfferCreate";
 import OfferUpdate from "./user/OfferUpdate";
 import AdminRoute from "../routes/AdminRoute";
 import AdminDashboard from "./admin/AdminDashboard";
-import FestiveBannerCreate from "./user/FestiveBannerCreate"
+import FestiveBannerCreate from "./user/FestiveBannerCreate";
+import PendingApprovals from "./admin/PendingApprovals";
 
 function App() {
   const dispatch = useDispatch();
@@ -87,13 +88,22 @@ function App() {
         <UserRoute path="/user/menu" exact component={Menu} />
         <UserRoute path="/user/menu/create" exact component={MenuCreate} />
         <UserRoute path="/user/menu/update/:id" exact component={MenuUpdate} />
-        <UserRoute path="/user/festivebanner" exact component={FestiveBannerCreate} />
-        <UserRoute path="/user/offers" exact component={Offers} />
-        <UserRoute path="/user/offer/create" exact component={OfferCreate} />
         <UserRoute
+          path="/user/festivebanner"
+          exact
+          component={FestiveBannerCreate}
+        />
+        <AdminRoute path="/user/offers" exact component={Offers} />
+        <AdminRoute path="/user/offer/create" exact component={OfferCreate} />
+        <AdminRoute
           path="/user/offer/update/:id"
           exact
           component={OfferUpdate}
+        />
+        <AdminRoute
+          path="/admin/pending-approvals"
+          exact
+          component={PendingApprovals}
         />
         <AdminRoute path="/admin/dashboard" exact component={AdminDashboard} />
       </Switch>
