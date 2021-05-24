@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useContext } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import UserNav from "../nav/UserNav";
 import { LoadingOutlined } from "@ant-design/icons";
 import { getPendingApprovals, addApproval } from "../../functions/approvals";
+import SpinnerModalContext from "../../contexts/SpinnerModalContext";
 
 function PendingApprovals() {
   const [restaurants, setRestaurants] = useState([]);
@@ -11,6 +12,9 @@ function PendingApprovals() {
   const [offers, setOffers] = useState([]);
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { showSpinnerModal, hideSpinnerModal } = useContext(
+    SpinnerModalContext
+  );
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -38,15 +42,17 @@ function PendingApprovals() {
 
   const handleApprove = (data) => {
     if (window.confirm("Are you sure you want to approve this request?")) {
-      setLoading(true);
+      showSpinnerModal();
       addApproval(data, user.token)
         .then((res) => {
           setLoading(false);
+          hideSpinnerModal();
           toast.success("Request approved");
           loadApprovals();
         })
         .catch((err) => {
           setLoading(false);
+          hideSpinnerModal();
           toast.error(
             "Something went wrong. Please reload the page and try again"
           );
@@ -150,6 +156,7 @@ function PendingApprovals() {
                               id: r.id,
                             })
                           }
+                          disabled={loading}
                         >
                           Approve
                         </button>

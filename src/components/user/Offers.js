@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import UserNav from "../nav/UserNav";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -8,6 +8,7 @@ import LocalSearch from "../forms/LocalSearch";
 import { LoadingOutlined, DeleteOutlined } from "@ant-design/icons";
 import { getAllOffers, removeOffer } from "../../functions/offer";
 import { offerColor } from "../utils/utils";
+import SpinnerModalContext from "../../contexts/SpinnerModalContext";
 import "../../css/styles.css";
 
 function Offers({ history }) {
@@ -18,6 +19,9 @@ function Offers({ history }) {
   //const [redOffers, setRedOffers] = useState([])
   const [keyword, setKeyword] = useState("");
   const [loading, setLoading] = useState(false);
+  const { showSpinnerModal, hideSpinnerModal } = useContext(
+    SpinnerModalContext
+  );
 
   useEffect(() => {
     loadAllOffers();
@@ -47,15 +51,17 @@ function Offers({ history }) {
 
   const handleRemove = (id, promotion_name) => {
     if (window.confirm(`Do you want to delete "${promotion_name}"?`)) {
-      setLoading(true);
+      showSpinnerModal();
       removeOffer(id, user.token)
         .then((res) => {
           setLoading(false);
+          hideSpinnerModal();
           toast.success(res.data);
           loadAllOffers();
         })
         .catch((err) => {
           setLoading(false);
+          hideSpinnerModal();
           toast.error("Something went wrong");
         });
     }

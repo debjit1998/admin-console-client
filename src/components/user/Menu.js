@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import UserNav from "../nav/UserNav";
 import { useSelector } from "react-redux";
 import { getRestaurantsByHotel } from "../../functions/hotels";
@@ -14,6 +14,7 @@ import {
 import LocalSearch from "../forms/LocalSearch";
 import { menuColor } from "../utils/utils";
 import noimage from "../../images/noimage.png";
+import SpinnerModalContext from "../../contexts/SpinnerModalContext";
 
 function Menu({ history }) {
   const [showRestaurants, setShowRestaurants] = useState(false);
@@ -22,6 +23,9 @@ function Menu({ history }) {
   const [keyword, setKeyword] = useState("");
   const [loading, setLoading] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] = useState("");
+  const { showSpinnerModal, hideSpinnerModal } = useContext(
+    SpinnerModalContext
+  );
 
   const { user } = useSelector((state) => ({ ...state }));
   const hotels = user.hotels;
@@ -98,15 +102,17 @@ function Menu({ history }) {
     setIsModalVisible(false);
 
     if (window.confirm(`Do you want to delete ${title} (${item_ref_id})?`)) {
-      setLoading(true);
+      showSpinnerModal();
       removeMenuItem(id, selectedRestaurant, user.token)
         .then((res) => {
           setLoading(false);
+          hideSpinnerModal();
           toast.success(res.data);
           loadMenuItems(selectedRestaurant, user.token);
         })
         .catch((err) => {
           setLoading(false);
+          hideSpinnerModal();
           console.log(err);
           toast.error("Something went wrong");
         });

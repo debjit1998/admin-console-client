@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import UserNav from "../nav/UserNav";
 import { getRestaurant } from "../../functions/hotels";
 import { useSelector } from "react-redux";
@@ -7,6 +7,7 @@ import { updateRestaurant } from "../../functions/hotels";
 import { Prompt } from "react-router-dom";
 import RestaurantUpdateForm from "../forms/RestaurantUpdateForm";
 import { UpdationPopupMessage } from "../utils/utils";
+import SpinnerModalContext from "../../contexts/SpinnerModalContext";
 
 const initialState = {
   name: "",
@@ -29,6 +30,9 @@ function RestaurantUpdate({ match, history }) {
   const [loading, setLoading] = useState(false);
   const [inputChange, setInputChange] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
+  const { showSpinnerModal, hideSpinnerModal } = useContext(
+    SpinnerModalContext
+  );
 
   useEffect(() => {
     setLoading(true);
@@ -108,10 +112,11 @@ function RestaurantUpdate({ match, history }) {
         UpdationPopupMessage(restaurant, Object.keys(initialState))
       )
     ) {
-      setLoading(true);
+      showSpinnerModal();
       updateRestaurant(restaurant.id, restaurant, user.token)
         .then((res) => {
           setIsDirty(false);
+          hideSpinnerModal();
           console.log(res.data);
           setLoading(false);
           toast.success(`${res.data.name} updated`);
@@ -120,6 +125,7 @@ function RestaurantUpdate({ match, history }) {
         .catch((err) => {
           setLoading(false);
           console.log(err);
+          hideSpinnerModal();
           if (err.response.status === 400) {
             toast.error(err.response.data);
           } else {

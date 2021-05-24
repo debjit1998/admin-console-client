@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import UserNav from "../nav/UserNav";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
@@ -8,6 +8,7 @@ import MenuCreateForm from "../forms/MenuCreateForm";
 import { addMenuItem } from "../../functions/menu";
 import { getAllBanners } from "../../functions/festivalbanner";
 import { CreationPopupMessage } from "../utils/utils";
+import SpinnerModalContext from "../../contexts/SpinnerModalContext";
 
 const initialState = {
   hotel_code: "",
@@ -31,7 +32,7 @@ const initialState = {
   veg_or_non_veg: "",
   prep_time_min: "",
   pdp_image_url: "",
-  festival_ids:""
+  festival_ids: "",
 };
 
 function MenuCreate({ history }) {
@@ -40,7 +41,10 @@ function MenuCreate({ history }) {
   const [showRestaurants, setShowRestaurants] = useState(false);
   const [restaurantOptions, setRestaurantOptions] = useState([]);
   const [isDirty, setIsDirty] = useState(false);
-  const [banners, setBanners] = useState([])
+  const [banners, setBanners] = useState([]);
+  const { showSpinnerModal, hideSpinnerModal } = useContext(
+    SpinnerModalContext
+  );
 
   const { user } = useSelector((state) => ({ ...state }));
   const hotels = user.hotels;
@@ -59,7 +63,6 @@ function MenuCreate({ history }) {
   useEffect(() => {
     loadAllBanners();
   }, [loadAllBanners]);
-
 
   const handleHotelChange = (e) => {
     setIsDirty(true);
@@ -189,17 +192,19 @@ function MenuCreate({ history }) {
     }
 
     if (window.confirm(CreationPopupMessage(values))) {
-      setLoading(true);
+      showSpinnerModal();
       addMenuItem(values, user.token)
         .then((res) => {
           setIsDirty(false);
           setLoading(false);
+          hideSpinnerModal();
           console.log(res.data);
           toast.success(`${res.data.title} successfully added`);
           history.push("/user/menu");
         })
         .catch((err) => {
           setLoading(false);
+          hideSpinnerModal();
           console.log(err);
           if (err.response.status === 400) {
             toast.error(err.response.data);

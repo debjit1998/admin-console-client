@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import UserNav from "../nav/UserNav";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
@@ -6,6 +6,7 @@ import { addRestaurant } from "../../functions/hotels";
 import { Prompt } from "react-router-dom";
 import RestaurantCreateForm from "../forms/RestaurantCreateForm";
 import { CreationPopupMessage } from "../utils/utils";
+import SpinnerModalContext from "../../contexts/SpinnerModalContext";
 
 const initialState = {
   name: "",
@@ -26,6 +27,9 @@ function RestaurantCreate({ history }) {
   const [values, setValues] = useState(initialState);
   const [loading, setLoading] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
+  const { showSpinnerModal, hideSpinnerModal } = useContext(
+    SpinnerModalContext
+  );
 
   const { user } = useSelector((state) => ({ ...state }));
   const hotels = user.hotels;
@@ -78,11 +82,12 @@ function RestaurantCreate({ history }) {
     }
 
     if (window.confirm(CreationPopupMessage(values))) {
-      setLoading(true);
+      showSpinnerModal();
       addRestaurant(values, user.token)
         .then((res) => {
           setIsDirty(false);
           console.log(res);
+          hideSpinnerModal();
           setLoading(false);
           toast.success(`"${res.data.name}" added!`);
           history.push("/");
@@ -90,6 +95,7 @@ function RestaurantCreate({ history }) {
         .catch((err) => {
           setLoading(false);
           console.log(err);
+          hideSpinnerModal();
           toast.error("Something went wrong");
         });
     }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import UserNav from "../nav/UserNav";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
@@ -7,6 +7,7 @@ import { Input } from "antd";
 import { getOffer, updateOffer } from "../../functions/offer";
 import { Prompt } from "react-router-dom";
 import { UpdationPopupMessage } from "../utils/utils";
+import SpinnerModalContext from "../../contexts/SpinnerModalContext";
 
 const { TextArea } = Input;
 
@@ -31,6 +32,9 @@ function OfferUpdate({ match, history }) {
   const [loading, setLoading] = useState(false);
   const [inputChange, setInputChange] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
+  const { showSpinnerModal, hideSpinnerModal } = useContext(
+    SpinnerModalContext
+  );
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -59,16 +63,18 @@ function OfferUpdate({ match, history }) {
     if (
       window.confirm(UpdationPopupMessage(values, Object.keys(initialState)))
     ) {
-      setLoading(true);
+      showSpinnerModal();
       updateOffer(values.id, values, user.token)
         .then((res) => {
           setIsDirty(false);
           setLoading(false);
+          hideSpinnerModal();
           toast.success(`${res.data.promotion_name} has been updated`);
           history.push("/user/offers");
         })
         .catch((err) => {
           setLoading(false);
+          hideSpinnerModal();
           console.log(err);
           if (err.response.status === 400) {
             toast.error(err.response.data);

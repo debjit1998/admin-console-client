@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import UserNav from "../nav/UserNav";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
@@ -7,6 +7,7 @@ import MenuUpdateForm from "../forms/MenuUpdateForm";
 import { updateMenuItem, getMenuItem } from "../../functions/menu";
 import { Prompt } from "react-router-dom";
 import { UpdationPopupMessage } from "../utils/utils";
+import SpinnerModalContext from "../../contexts/SpinnerModalContext";
 
 const initialState = {
   hotel_code: "",
@@ -38,6 +39,9 @@ function MenuUpdate({ history, match }) {
   const [loading, setLoading] = useState(false);
   const [inputChange, setInputChange] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
+  const { showSpinnerModal, hideSpinnerModal } = useContext(
+    SpinnerModalContext
+  );
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -140,11 +144,12 @@ function MenuUpdate({ history, match }) {
     if (
       window.confirm(UpdationPopupMessage(values, Object.keys(initialState)))
     ) {
-      setLoading(true);
+      showSpinnerModal();
       updateMenuItem(match.params.id, values, user.token)
         .then((res) => {
           setIsDirty(false);
           setLoading(false);
+          hideSpinnerModal();
           console.log(res.data);
           toast.success(`${res.data.title} successfully updated`);
           history.push("/user/menu");
@@ -152,6 +157,7 @@ function MenuUpdate({ history, match }) {
         .catch((err) => {
           setLoading(false);
           console.log(err);
+          hideSpinnerModal();
           if (err.response.status === 400) {
             toast.error(err.response.data);
           } else {

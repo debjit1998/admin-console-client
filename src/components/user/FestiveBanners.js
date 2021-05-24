@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { DeleteOutlined } from "@ant-design/icons";
 import { Modal, Button } from "antd";
 import noimage from "../../images/noimage.png";
@@ -8,11 +8,15 @@ import {
 } from "../../functions/festivalbanner";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import SpinnerModalContext from "../../contexts/SpinnerModalContext";
 
 function FestiveBanners({ b, loadAllBanners }) {
   const [values, setValues] = useState(b);
   const [modalBanner, setModalBanner] = useState({});
-  const [disabled, setDisabled] = useState(false)
+  const [disabled, setDisabled] = useState(false);
+  const { showSpinnerModal, hideSpinnerModal } = useContext(
+    SpinnerModalContext
+  );
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -38,12 +42,15 @@ function FestiveBanners({ b, loadAllBanners }) {
         `Do you want to delete ${b.festival_name} - ${b.restaurant_name} - ${b.hotel_code}`
       )
     ) {
+      showSpinnerModal();
       removeFestiveBanner(id, festival_name, user.token)
         .then((res) => {
+          hideSpinnerModal();
           toast.success("Banner deleted successfully");
           loadAllBanners();
         })
         .catch((err) => {
+          hideSpinnerModal();
           toast.error("Something went wrong");
         });
     }
@@ -52,16 +59,19 @@ function FestiveBanners({ b, loadAllBanners }) {
   const handleUpdate = (e) => {
     e.preventDefault();
     console.log(values);
-    setDisabled(true)
+    setDisabled(true);
+    showSpinnerModal();
     updateFestiveBanner(values, user.token)
       .then((res) => {
         toast.success("Banner updated successfuly");
         setIsModalVisible(false);
-        setDisabled(false)
+        hideSpinnerModal();
+        setDisabled(false);
         loadAllBanners();
       })
       .catch((err) => {
-        setDisabled(false)
+        setDisabled(false);
+        hideSpinnerModal();
         toast.error("Something went wrong!");
       });
   };

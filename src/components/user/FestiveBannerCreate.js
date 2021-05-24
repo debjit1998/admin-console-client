@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import UserNav from "../nav/UserNav";
 import { useSelector } from "react-redux";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -8,6 +8,7 @@ import { createBanner, getAllBanners } from "../../functions/festivalbanner";
 import FestiveBanners from "./FestiveBanners";
 import { Select } from "antd";
 import { toast } from "react-toastify";
+import SpinnerModalContext from "../../contexts/SpinnerModalContext";
 
 const { Option } = Select;
 
@@ -18,7 +19,7 @@ const initialValues = {
   end_date: "",
   restaurantArr: [],
   banner_url: "",
-  festival_description:""
+  festival_description: "",
 };
 
 function FestiveBannerCreate() {
@@ -27,6 +28,9 @@ function FestiveBannerCreate() {
   const [restaurantOptions, setRestaurantOptions] = useState([]);
   const [banners, setBanners] = useState([]);
   const [keyword, setKeyword] = useState("");
+  const { showSpinnerModal, hideSpinnerModal } = useContext(
+    SpinnerModalContext
+  );
 
   const { user } = useSelector((state) => ({ ...state }));
   const hotels = user.hotels;
@@ -50,8 +54,8 @@ function FestiveBannerCreate() {
     console.log(JSON.stringify(values, null, 2));
 
     if (e.target.value !== "Please select") {
-      setRestaurantOptions([]);
       setLoading(true);
+      setRestaurantOptions([]);
       getRestaurantsByHotel(e.target.value, user.token)
         .then((res) => {
           setRestaurantOptions(res.data);
@@ -64,7 +68,7 @@ function FestiveBannerCreate() {
             end_date: "",
             banner_url: "",
             festival_name: "",
-            festival_description:""
+            festival_description: "",
           });
         })
         .catch((err) => {
@@ -99,10 +103,11 @@ function FestiveBannerCreate() {
 
     if (window.confirm(JSON.stringify(values, null, 2))) {
       console.log(values);
-      setLoading(true);
+      showSpinnerModal();
       createBanner(values, user.token)
         .then((res) => {
           setLoading(false);
+          hideSpinnerModal();
           toast.success(
             `Banners added successfully for the restaurants ${res.data.join(
               ", "
@@ -112,6 +117,7 @@ function FestiveBannerCreate() {
         })
         .catch((err) => {
           setLoading(false);
+          hideSpinnerModal();
           toast.error("Something went wrong!");
         });
     }
@@ -311,7 +317,13 @@ function FestiveBannerCreate() {
               )}
               {banners.length > 0 &&
                 banners.filter(searched(keyword)).map((b, i) => {
-                  return <FestiveBanners b={b} key={i} loadAllBanners={loadAllBanners} />;
+                  return (
+                    <FestiveBanners
+                      b={b}
+                      key={i}
+                      loadAllBanners={loadAllBanners}
+                    />
+                  );
                 })}
             </div>
           </div>

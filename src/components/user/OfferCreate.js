@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import UserNav from "../nav/UserNav";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
@@ -7,6 +7,7 @@ import { Input } from "antd";
 import { addOffer } from "../../functions/offer";
 import { Prompt } from "react-router-dom";
 import { CreationPopupMessage } from "../utils/utils";
+import SpinnerModalContext from "../../contexts/SpinnerModalContext";
 
 const { TextArea } = Input;
 
@@ -30,6 +31,9 @@ function OfferCreate({ history }) {
   const [values, setValues] = useState(initialState);
   const [loading, setLoading] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
+  const { showSpinnerModal, hideSpinnerModal } = useContext(
+    SpinnerModalContext
+  );
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -48,16 +52,18 @@ function OfferCreate({ history }) {
 
     console.log(values);
     if (window.confirm(CreationPopupMessage(values))) {
-      setLoading(true);
+      showSpinnerModal();
       addOffer(values, user.token)
         .then((res) => {
           setIsDirty(false);
           setLoading(false);
+          hideSpinnerModal();
           toast.success(`${res.data.promotion_name} has been added`);
           history.push("/user/offers");
         })
         .catch((err) => {
           setLoading(false);
+          hideSpinnerModal();
           console.log(err);
           if (err.response.status === 400) {
             toast.error(err.response.data);

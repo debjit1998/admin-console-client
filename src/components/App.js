@@ -5,6 +5,8 @@ import { useDispatch } from "react-redux";
 import "antd/dist/antd.css";
 import "react-toastify/dist/ReactToastify.css";
 
+import { SpinnerModalProvider } from "../contexts/SpinnerModalContext";
+import SpinnerModal from "../modals/SpinnerModal";
 import { auth } from "../firebase";
 import Header from "./nav/Header";
 import Login from "./auth/Login";
@@ -62,51 +64,62 @@ function App() {
   }, [dispatch]);
   return (
     <>
-      <Header />
-      <ToastContainer />
-      <Switch>
-        <Route
-          path="/"
-          exact
-          render={(props) => {
-            return <Login {...props} checking={loading} />;
-          }}
-        />
-        <Route path="/forgot/password" exact component={ForgotPassword} />
-        <UserRoute path="/user" exact component={Restaurants} />
-        <UserRoute
-          path="/user/restaurant/create"
-          exact
-          component={RestaurantCreate}
-        />
-        <UserRoute
-          path="/user/restaurant/:id"
-          exact
-          component={RestaurantUpdate}
-        />
-        <UserRoute path="/user/password" exact component={Password} />
-        <UserRoute path="/user/menu" exact component={Menu} />
-        <UserRoute path="/user/menu/create" exact component={MenuCreate} />
-        <UserRoute path="/user/menu/update/:id" exact component={MenuUpdate} />
-        <UserRoute
-          path="/user/festivebanner"
-          exact
-          component={FestiveBannerCreate}
-        />
-        <AdminRoute path="/user/offers" exact component={Offers} />
-        <AdminRoute path="/user/offer/create" exact component={OfferCreate} />
-        <AdminRoute
-          path="/user/offer/update/:id"
-          exact
-          component={OfferUpdate}
-        />
-        <AdminRoute
-          path="/admin/pending-approvals"
-          exact
-          component={PendingApprovals}
-        />
-        <AdminRoute path="/admin/dashboard" exact component={AdminDashboard} />
-      </Switch>
+      <SpinnerModalProvider>
+        <SpinnerModal />
+        <Header />
+        <ToastContainer />
+        <Switch>
+          <Route
+            path="/"
+            exact
+            render={(props) => {
+              return <Login {...props} checking={loading} />;
+            }}
+          />
+          <Route path="/forgot/password" exact component={ForgotPassword} />
+          <UserRoute path="/user" exact component={Restaurants} />
+          <UserRoute
+            path="/user/restaurant/create"
+            exact
+            component={RestaurantCreate}
+          />
+          <UserRoute
+            path="/user/restaurant/:id"
+            exact
+            component={RestaurantUpdate}
+          />
+          <UserRoute path="/user/password" exact component={Password} />
+          <UserRoute path="/user/menu" exact component={Menu} />
+          <UserRoute path="/user/menu/create" exact component={MenuCreate} />
+          <UserRoute
+            path="/user/menu/update/:id"
+            exact
+            component={MenuUpdate}
+          />
+          <UserRoute
+            path="/user/festivebanner"
+            exact
+            component={FestiveBannerCreate}
+          />
+          <AdminRoute path="/user/offers" exact component={Offers} />
+          <AdminRoute path="/user/offer/create" exact component={OfferCreate} />
+          <AdminRoute
+            path="/user/offer/update/:id"
+            exact
+            component={OfferUpdate}
+          />
+          <AdminRoute
+            path="/admin/pending-approvals"
+            exact
+            component={PendingApprovals}
+          />
+          <AdminRoute
+            path="/admin/dashboard"
+            exact
+            component={AdminDashboard}
+          />
+        </Switch>
+      </SpinnerModalProvider>
     </>
   );
 }
